@@ -1,0 +1,186 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel panel-default">
+                <div class="panel-heading">Task List</div>
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Level</th>
+                        <th>Person in charge</th>
+                        <th>Operations</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in queryset %}
+                        <tr>
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.title }}</td>
+                            <td>{{ item.get_levels_display }}</td>
+                            <td>{{ item.user.username }}</td>
+
+                            <td>
+                                {#                        <td>{{ item.create_time.strftime("%Y-%m-%d") }}</td>#}
+                                <a class="btn btn-primary btn-xs" href="#">Edit</a>
+                                <a class="btn btn-danger btn-xs" href="#">Delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="panel-body">
+
+                <form id="FormAdd">
+
+                    <div class="clearfix">
+                        {% for item in form %}
+                            <div class="col-xs-6">
+                                <div class="form-group" style="position: relative; margin-bottom: 25px;">
+                                    <label>{{ item.label }}</label>
+                                    {{ item }}
+                                    <span class="error-msg" style="color: red; position: absolute;"></span>
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                        <div class="col-xs-12">
+                            {#                            <button type="submit" 原先这里是submit是因为用post提交表单 #}
+                            <button id="btnAdd" type="button" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+        <ul class="pagination">
+            {{ page_string }}
+        </ul>
+
+        <div style="height: 1000px;"></div>
+
+        <hr/>
+        <h1>Task management</h1>
+
+        <h3>Example 1</h3>
+        <input type="button" class="btn btn-primary" value="click" onclick="clickMe();">
+
+        <h3>Example 2</h3>
+        <input type="text" id="txtUser" placeholder="Username">
+        <input type="text" id="txtAge" placeholder="Age">
+        <input id="btn2" type="button" class="btn-primary" value="CLICK2">
+
+
+        <h3>Example 3</h3>
+        <form id="form3">
+            <input type="text" name="txtUser" placeholder="Username">
+            <input type="text" name="txtAge" placeholder="Age">
+            <input type="text" name="txtEmail" placeholder="Email">
+            <input id="btn3" type="button" class="btn-primary" value="CLICK3">
+        </form>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+
+    <script type="text/javascript">
+        function clickMe() {
+            $.ajax({
+                url: "/task/ajax/",
+                type: "post",
+                data: {
+                    n1: 123,
+                    n2: 456,
+                },
+                dataType: "JSON",
+                success: function (res) {
+                    console.log(res);
+                    console.log(res.status);
+                    console.log(res.data);
+                }
+            })
+        }
+
+        $(function () {
+            {#// 页面框架加载完成后自动执行#}
+
+            bindBtn2Event();
+
+            bindBtn3Event();
+
+            bindBtnAddEvent();
+
+        })
+
+        function bindBtn2Event() {
+            $("#btn2").click(function () {
+                $.ajax({
+                    url: "/task/ajax/",
+                    type: "post",
+                    data: {
+                        username: $("#txtUser").val(),
+                        age: $("#txtAge").val(),
+                    },
+                    dataType: "JSON",
+                    success: function (res) {
+                        console.log(res);
+                        console.log(res.status);
+                        console.log(res.data);
+                    }
+                })
+            })
+        }
+
+        function bindBtn3Event() {
+            $("#btn3").click(function () {
+                $.ajax({
+                    url: "/task/ajax/",
+                    type: "post",
+                    data: $("#form3").serialize(),
+                    dataType: "JSON",
+                    success: function (res) {
+                        if (res.status) {
+                            alert("Add Successfully")
+                        }
+                    }
+                })
+            })
+        }
+
+        function bindBtnAddEvent() {
+            $("#btnAdd").click(function () {
+
+                $(".error-msg").empty();
+
+                $.ajax({
+                    url: "/task/add/",
+                    type: "post",
+                    data: $("#FormAdd").serialize(),
+                    dataType: "JSON",
+                    success: function (res) {
+                        if (res.status) {
+                            alert("Add Successfully");
+                            {# use JS to refresh the page #}
+                            {# to see the new data just added #}
+                            location.reload();
+                        } else {
+                            $.each(res.error, function (name, data) {
+                                $("#id_" + name).next().text(data[0]);
+                            })
+                        }
+                    }
+                })
+            })
+        }
+    </script>
+
+{% endblock %}

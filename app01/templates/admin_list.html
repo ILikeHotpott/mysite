@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="container">
+        <div style="margin-bottom: 10px;" class="clearfix">
+            <a class="btn btn-success" href="/admin/add">
+                <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                Add an Administrator</a>
+
+            <div style="float: right; width:300px;">
+                <form method="get">
+                    <div class="input-group">
+
+                        <input type="text" class="form-control" name="q" placeholder="Keyword"
+                               value="{{ search_data }}">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                            </button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+        <div>
+            <div class="panel panel-default">
+                <div class="panel-heading">Administrator List</div>
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Password</th>
+                        <th>Reset Password</th>
+                        <th>Operations</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in queryset %}
+                        <tr>
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.username }}</td>
+                            <td>********</td>
+                            <td>
+                                <a href="/admin/{{ item.id }}/reset/">Reset Passsword</a>
+                            </td>
+                            <td>
+                                {#                        <td>{{ item.create_time.strftime("%Y-%m-%d") }}</td>#}
+                                <a class="btn btn-primary btn-xs" href="/admin/{{ item.id }}/edit/">Edit</a>
+                                <a class="btn btn-danger btn-xs" href="/admin/{{ item.id }}/delete/">Delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        <ul class="pagination">
+            {{ page_string }}
+        </ul>
+    </div>
+
+{% endblock %}

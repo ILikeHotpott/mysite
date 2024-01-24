@@ -1,0 +1,38 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container">
+    <div style="margin-bottom: 10px;">
+        <a class="btn btn-success" href="/depart/add">Create A Department</a>
+    </div>
+    <div>
+        <div class="panel panel-default">
+            <div class="panel-heading">Department List</div>
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Operations</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in queryset %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.title}}</td>
+                    <td>
+                        <a class="btn btn-primary btn-xs" href="/depart/{{ item.id }}/edit/">Edit</a>
+                        <a class="btn btn-danger btn-xs" href="/depart/delete/?nid={{ item.id }}">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

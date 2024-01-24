@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="container">
+        <div style="margin-bottom: 10px;" class="clearfix">
+            <a class="btn btn-success" href="/num/add/">
+                <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                Add a Number</a>
+
+            <div style="float: right; width:300px;">
+                <form method="get">
+                    <div class="input-group">
+
+                        <input type="text" class="form-control" name="q" placeholder="Search for..." ,
+                               value="{{ value }}">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                            </button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+        <div>
+            <div class="panel panel-default">
+                <div class="panel-heading">Number List</div>
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Mobile</th>
+                        <th>Price</th>
+                        <th>Level</th>
+                        <th>Status</th>
+                        <th>Operations</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in nums %}
+                        <tr>
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.mobile }}</td>
+                            <td>{{ item.price }}</td>
+                            <td>{{ item.get_level_display }}</td>
+                            <td>{{ item.get_status_display }}</td>
+                            <td>
+                                {#                        <td>{{ item.create_time.strftime("%Y-%m-%d") }}</td>#}
+                                <a class="btn btn-primary btn-xs" href="/num/{{ item.id }}/edit/">Edit</a>
+                                <a class="btn btn-danger btn-xs" href="/num/{{ item.id }}/delete">Delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+
+
+        </div>
+
+    </div>
+
+{% endblock %}
